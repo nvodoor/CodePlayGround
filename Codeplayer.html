@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <title>Codeplayer</title>
+    
+    <script src="jquery-3.2.0.min.js"></script>
+        
+    <link href="jquery-ui-1.12.1/jquery-ui.css" rel="stylesheet">
+        
+    <script src="jquery-ui-1.12.1/jquery-ui.js"></script>
+    
+    <style type="text/css">
+        
+        #control {
+            
+            background-color: hsl(0, 0%, 85%);
+            height: 50px;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            right: 0;
+            border-bottom: 1px solid #aaa;
+            text-shadow: none;
+            
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #codeplayer {
+            margin-left: 20px;
+            margin-top: 5px;
+            margin-bottom: 1px;    
+        }
+        
+        #panels {
+            text-align: center;
+            overflow: hidden;
+            position: absolute;
+            top: 5px;
+            width: 100%;
+            padding-top: 2px;
+            padding-bottom: 1px;
+            margin: 0px;
+            margin-left: 40%;
+        }
+        
+        #panels a {
+            color: black;
+            text-decoration: none;
+            display: inline-flex;
+            float: left;
+        }
+        
+        #panels .button {
+                height: 17px;
+                line-height: 19px;
+                margin: 0px;
+        }
+        
+        .button {
+            position: relative;
+            border: 1px solid black;
+            height: 30px;
+            line-height: 30px;
+            padding: 6px 10px;
+            display: inline-block;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        
+        .button:hover {
+            background-color: #919499;
+        }
+        
+        .active {
+            background-color: #EBF3FF;
+            background-color: hsl(215, 100%, 96%);
+            text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+            border-top: 1px solid #AAA;
+            border-left: 1px solid #AAA;
+        }
+        
+        .blue {
+            background-color: blue;
+        }
+        
+        #box {
+            width: 1600px;
+            height: 80%;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 800px;
+            float: left;
+            margin-top: 3%;
+            font-size: 100%;
+        }
+        
+        #Output {
+            width: 100%;
+            height: 800px;
+            float: left;
+            border-left: 1px solid black;
+            margin-top: 3%;
+        }
+        
+    </style> 
+    
+    
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            
+            $("#html").hide();
+            $("#CSS").hide();
+            $("#Javascript").hide();
+            $('#Output').hide();
+            
+            var toggled = false;
+            var boggled = false;
+            var woggled = false;
+            var shoggled = false;
+
+            var count = 0;
+            
+            var countChecker = function () {
+                if (count === 2) {
+                    $('textarea').css("width","44%");
+                    $('#Output').css("width", "44%")
+                }
+                if (count === 3) {
+                    $('textarea').css("width","30%");
+                    $('#Output').css("width","30%");
+                }
+                if (count === 4) {
+                    $('textarea').css("width","20%");
+                    $('#Output').css("width","20%");
+                }
+            }
+
+            $("#one").click(function () {
+                if (toggled === false) {
+                  $('#html').show();
+                  $("#one").css("background-color", "#EBF3FF")
+                  toggled = true;
+                  countChecker();
+                  count++;
+                } else {
+                    $('#html').hide();
+                    $("#one").css("background-color", "hsl(0, 0%, 85%)")
+                    toggled = false;
+                    countChecker();
+                    count--;
+                }
+
+            })
+
+            $("#two").click(function () {
+                if (boggled === false) {
+                    $('#CSS').show();
+                   $("#two").css("background-color", "#EBF3FF") 
+                    boggled = true;
+                    count++;
+                    countChecker();    
+                } else {
+                    $("#two").css("background-color", "hsl(0, 0%, 85%)")
+                    $('#CSS').hide();
+                    boggled = false;
+                    count--;
+                    countChecker();
+                }
+
+            })
+
+            $("#three").click(function () {
+                if (woggled === false) {
+                   $('#Javascript').show();
+                   $("#three").css("background-color", "#EBF3FF")
+                    woggled = true;
+                    count++;
+                    countChecker();
+                } else {
+                    $('#Javascript').hide();
+                    $("#three").css("background-color", "hsl(0, 0%, 85%)")
+                    woggled = false;
+                    count--;
+                    countChecker();
+                }
+
+            })
+
+            $("#four").click(function () {
+              if (shoggled === false) {
+                  $("#four").css("background-color", "#EBF3FF")
+                  $('#Output').show();
+                  shoggled = true;
+                  count++;
+                  countChecker();
+              } else {
+                  $('#Output').hide();
+                  $('#four').css('background-color','hsl(0, 0%, 85%)')
+                  shoggled = false;
+                  count--;
+                  countChecker();
+              }
+
+            })
+            
+//            var html= $("#html").keyup(function () {
+//                var value = $(this).val();
+//                $("#Output").html(value)
+//            })
+//            
+//            var css = $("#CSS").keyup(function () {
+//                var vals =  $(this).val();
+//                 $("#Output").html(vals);
+//            })
+//            
+//            var js = $("#Javascript").keyup(function () {
+//                var vales = $(this).val();
+//                $("#Output").html(vales);
+//            })
+            
+            function updateOutput() {
+                $("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#CSS").val() + "</style></head><body>" + $("#html").val() + "</body></html>");
+                
+                document.getElementById("Output").contentWindow.eval($("#Javascript").val())
+    
+            }
+            
+            updateOutput();
+            
+            $("textarea").on('change keyup paste', function () {
+                updateOutput();
+            })
+            
+            
+           
+
+        });
+//            $("#panels a").click(function () {
+//                $('#panels a').removeClass(".active");
+//                $(this).addClass(".active");
+//                
+//            })
+//            
+        
+
+        </script>
+        
+        
+    </head>
+
+    <body>
+        
+        <div id="control">
+            <h1 id="codeplayer">CodePlayer</h1>
+            <div id="panels">
+                <a role="button" class="button" id="one">HTML</a>
+                <a role="button" class="button" id="two">CSS</a>
+                <a role="button" class="button" id="three">JavaScript</a>
+                <a role="button" class="button" id="four">Output</a>
+            </div>
+        </div>
+            
+        <div id="box">
+            <textarea rows="8" cols="70" id="html">
+                <p id="par">Hello</p>
+            </textarea>
+            <textarea rows="8" cols="70" id="CSS">
+                p {color: blue; }
+            </textarea>
+            <textarea rows="8" cols="70" id="Javascript">
+                document.getElementById("par").innerHTML = "hi there!"
+            </textarea>
+            <iframe id="Output">
+            </iframe>
+        </div>
+    
+    </body>
+
+
+</html>
+
+<!---  -->
